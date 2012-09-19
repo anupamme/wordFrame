@@ -1,5 +1,5 @@
 
-(function ($, document) {
+(function ($, window, document) {
   'use strict';
 
   var data = {
@@ -32,8 +32,19 @@
 	  });
 	},
 
-	exec: function() {
+	exec: function(command, arg) {
+	  document.execCommand(command, false, typeof arg !== undefined ? arg : null);
+	},
+
+	getSelectionText: function () {
 	  
+	  var text = "";
+	  if (window.getSelection) {
+            text = window.getSelection().toString();
+	  } else if (document.selection && document.selection.type == "Text") {
+            text = document.selection.createRange().text;
+	  }
+	  return text;
 	},
 	
 	buildMenu: function () {
@@ -64,4 +75,4 @@
     }    
   };
     
-}(jQuery, document));
+}(jQuery, window, document));
