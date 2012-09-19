@@ -12,11 +12,20 @@
       'click [data-type=h2]': 'h2',
       'click [data-type=h3]': 'h3',
       'click a': 'cancel'
-    }
+    },
+
+    menuItems: [
+      	  '<a href="#" data-type="bold">Bold</a>',
+	  '<a href="#" data-type="italic">Italic</a>',
+	  '<a href="#" data-type="list">List</a>',
+	  '<a href="#" data-type="link">Link</a>',
+	  '<a href="#" data-type="h2">Large</a>',
+	  '<a href="#" data-type="h3">Medium</a>'
+    ]
     
   },
 
-  methods = (function() {
+  methods = (function () {
 
     var getSelectionText = function () {
       
@@ -29,9 +38,13 @@
       return text;
     },
     
-    exec = function(command, arg) {
+    exec = function (command, arg) {
       document.execCommand(command, false, typeof arg !== undefined ? arg : null);
-    };	    
+    },
+
+    query = function (command) {
+      return document.queryCommandValue(command);
+    };
     
     return {
       
@@ -45,20 +58,21 @@
 	  $(this)
 	    .attr('contenteditable', true)
 	    .addClass('area')
-	    .lyvewrite('buildMenu');
+	    .lyvewrite('buildMenu', data.menuItems);
 	});
       },
       
-      buildMenu: function () {
+      buildMenu: function (menuItems) {
 	
-	var $menu = $('<div/>').empty()
-	  .append('<a href="#" data-type="bold">Bold</a>')
-	  .append('<a href="#" data-type="italic">Italic</a>')
-	  .append('<a href="#" data-type="list">List</a>')
-	  .append('<a href="#" data-type="link">Link</a>')
-	  .append('<a href="#" data-type="h2">Large</a>')
-	  .append('<a href="#" data-type="h3">Medium</a>')
-	  .addClass('lyvewrite');
+	var $menu = $('<div/>').addClass('lyvewrite');
+
+	if (menuItems instanceof Array) {
+	  menuItems.forEach(function (item, idx, array) {
+	    $menu.append(item);
+	  }, null)
+	} else {
+	    $.error('incorrect argument passed to function buildMenu');
+	}
 	
 	return $menu.insertBefore(this);
       }
@@ -74,7 +88,6 @@
       return methods.init.apply( this, arguments );
     } else {
       $.error( 'Method ' +  method + ' does not exist on jQuery.lyvewrite' );
-      return true;
     }    
   };
   
