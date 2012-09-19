@@ -3,19 +3,24 @@
   <head>
     <title>LyveWrite</title>
 
+    <link rel="stylesheet" type="text/css" href="lyvewrite.css" />
     <link rel="stylesheet" type="text/css" href="test/qunit-git.css" />
 
     <script src="lib/jquery-1.8.1.js"></script>
     <script src="jquery.lyvewrite.js"></script>
     <script src="script.js"></script>
-    <script src="test/qunit-git.js"></script>
     
   </head>
 
   <body>
-    <div id="editor"></div>
+    <div id="container" style="width:800px">
+      <div id="editor"></div>
+    </div>
+
     <div id="qunit"></div>
-    
+	  
+    <script src="test/qunit-git.js"></script>
+    <script src="test/tests.js"></script>    
   </body>
 
 </html>
