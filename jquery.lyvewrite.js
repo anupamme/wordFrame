@@ -4,6 +4,10 @@
 
   var data = {
 
+    areaClassName: 'area',
+
+    menuclassName: 'lyvewrite',
+
     events: {
       'click [data-type=bold]': 'bold',
       'click [data-type=italic]': 'italic',
@@ -57,14 +61,14 @@
 	return this.each(function (idx) {  
 	  $(this)
 	    .attr('contenteditable', true)
-	    .addClass('area')
-	    .lyvewrite('buildMenu', data.menuItems);
+	    .addClass(data.areaClassName)
+	    .lyvewrite('buildMenu', data.menuItems, data.menuclassName);
 	});
       },
       
-      buildMenu: function (menuItems) {
+      buildMenu: function (menuItems, className) {
 	
-	var $menu = $('<div/>').addClass('lyvewrite');
+	var $menu = $('<div/>').addClass(className);
 
 	if (menuItems instanceof Array) {
 	  menuItems.forEach(function (item, idx, array) {
@@ -75,9 +79,14 @@
 	}
 	
 	return $menu.insertBefore(this);
+      },
+
+      delegateEvents: function (events) {
+	
       }
-      
+
     };
+
   }());
   
   $.fn.lyvewrite = function (method) {
