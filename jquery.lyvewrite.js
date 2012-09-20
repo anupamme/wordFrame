@@ -5,14 +5,20 @@
   var methods = (function () {
 
     var getSelectionText = function () {
-      
       var text = "";
-      if (this.getSelection) {
+      if (document.getSelection) {
         text = window.getSelection().toString();
       } else if (document.selection && document.selection.type == "Text") {
         text = document.selection.createRange().text;
       }
       return text;
+    },
+
+    selectTest = function() {
+      if (getSelectionText().length === 0) {
+	alert('Please select some text first');
+	return false;
+      } else { return true; }
     },
     
     exec = function (command, arg) {
@@ -24,25 +30,47 @@
     },
 
     bold = function (e) {
-      console.log(e);
+      e.preventDefault();
+      exec('bold');
     },
     
     italic = function (e) {
+      e.preventDefault();
+      exec('italic');
     },
     
     list = function (e) {
+      e.preventDefault();
+      exec('insertUnorderedList');
     },
 
     link = function (e) {
+      e.preventDefault();
+      if (selectTest()) {
+	exec('unlink');
+	var href = prompt('Enter a link:', 'http://');
+	console.log(href);
+	exec('createLink', href);
+      } else { return; }
     },
     
     h2 = function (e) {
+      e.preventDefault();
+      if (query('formatBlock') === 'h2') {
+	exec('formatBlock', 'p');
+      } else { exec('formatBlock', 'h2'); }
     },
     
     h3 = function (e) {
+      e.preventDefault();
+      if (query('formatBlock') === 'h3') {
+	exec('formatBlock', 'p');
+      } else { exec('formatBlock', 'h3'); }
     },
     
     cancel = function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
     },
 
     data = {
