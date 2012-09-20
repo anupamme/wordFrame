@@ -2,34 +2,7 @@
 (function ($, window, document) {
   'use strict';
 
-  var data = {
-
-    areaClassName: 'area',
-
-    menuclassName: 'lyvewrite',
-
-    events: {
-      'click [data-type=bold]': 'bold',
-      'click [data-type=italic]': 'italic',
-      'click [data-type=list]': 'list',
-      'click [data-type=link]': 'link',
-      'click [data-type=h2]': 'h2',
-      'click [data-type=h3]': 'h3',
-      'click a': 'cancel'
-    },
-
-    menuItems: [
-      	  '<a href="#" data-type="bold">Bold</a>',
-	  '<a href="#" data-type="italic">Italic</a>',
-	  '<a href="#" data-type="list">List</a>',
-	  '<a href="#" data-type="link">Link</a>',
-	  '<a href="#" data-type="h2">Large</a>',
-	  '<a href="#" data-type="h3">Medium</a>'
-    ]
-    
-  },
-
-  methods = (function () {
+  var methods = (function () {
 
     var getSelectionText = function () {
       
@@ -48,6 +21,69 @@
 
     query = function (command) {
       return document.queryCommandValue(command);
+    },
+
+    bold = function (e) {
+      console.log(e);
+    },
+    
+    italic = function (e) {
+    },
+    
+    list = function (e) {
+    },
+
+    link = function (e) {
+    },
+    
+    h2 = function (e) {
+    },
+    
+    h3 = function (e) {
+    },
+    
+    cancel = function (e) {
+    },
+
+    data = {
+
+      areaClassName: 'area',
+
+      menuClassName: 'lyvewrite',
+
+      eventsObj: {
+	'[data-type=bold]': [
+	  {'click': [bold]}
+	],
+	'[data-type=italic]': [
+	  {'click': [italic] }
+	],
+	'[data-type=list]': [
+	  {'click': [list]}
+	],
+	'[data-type=link]': [
+	  {'click': [link] } 
+	],
+	'[data-type=h2]': [
+	  {'click': [h2]}
+	],
+	'[data-type=h3]': [
+	  {'click': [h3]}
+	],
+	'a': [
+	  {'click': [cancel]}
+	]
+      },
+
+      menuItems: [
+      	'<a href="#" data-type="bold">Bold</a>',
+	'<a href="#" data-type="italic">Italic</a>',
+	'<a href="#" data-type="list">List</a>',
+	'<a href="#" data-type="link">Link</a>',
+	'<a href="#" data-type="h2">Large</a>',
+	'<a href="#" data-type="h3">Medium</a>'
+      ]
+      
     };
     
     return {
@@ -62,7 +98,8 @@
 	  $(this)
 	    .attr('contenteditable', true)
 	    .addClass(data.areaClassName)
-	    .lyvewrite('buildMenu', data.menuItems, data.menuclassName);
+	    .lyvewrite('buildMenu', data.menuItems, data.menuClassName)
+	    .lyvewrite('delegateEvents', data.eventsObj);
 	});
       },
       
@@ -75,14 +112,30 @@
 	    $menu.append(item);
 	  }, null)
 	} else {
-	    $.error('incorrect argument passed to function buildMenu');
+	  $.error('incorrect argument passed to function buildMenu');
 	}
 	
 	return $menu.insertBefore(this);
       },
 
-      delegateEvents: function (events) {
-	
+      delegateEvents: function (eventsObj) {
+
+	for (var selector in eventsObj) {
+
+	  var eventMapList = eventsObj[selector];
+	  eventMapList.forEach(function (eventMap, idx, array) {
+
+	    for (var event in eventMap) {
+
+	      var handlers = eventMap[event];
+	      handlers.forEach(function (handler, idx, array) {
+		$(this).delegate(selector, event, handler);
+	      }, this);
+
+	    }
+	  }, this);
+
+	}
       }
 
     };
