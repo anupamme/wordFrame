@@ -118,32 +118,37 @@
       
       init: function (options) {
 	
-	var settings = $.extend({
-	  
-	}, options || {});
+	var settings = $.extend(data, options || {});
 	
 	return this.each(function (idx) {  
 	  $(this)
-	    .attr('contenteditable', true)
-	    .addClass(data.areaClassName)
-	    .lyvewrite('buildMenu', data.menuItems, data.menuClassName)
-	    .lyvewrite('delegateEvents', data.eventsObj);
+	    .lyvewrite('addMenu', settings.menuItems, settings.menuClassName)
+	    .lyvewrite('addTextarea', settings.areaClassName)
+	    .lyvewrite('delegateEvents', settings.eventsObj);
 	});
       },
+
+      addTextarea: function (className) {
+	var $textarea = $("<div id='lwtextarea'/>")
+	  .attr('contenteditable', true)
+	  .addClass(className);
+
+	return this.append($textarea);
+      },
       
-      buildMenu: function (menuItems, className) {
+      addMenu: function (menuItems, className) {
 	
-	var $menu = $('<div/>').addClass(className);
+	var $menu = $("<div id='lwmenu'/>").addClass(className);
 
 	if (menuItems instanceof Array) {
 	  menuItems.forEach(function (item, idx, array) {
 	    $menu.append(item);
-	  }, null)
+	  }, null);
 	} else {
-	  $.error('incorrect argument passed to function buildMenu');
+	  $.error('incorrect argument passed to function addMenu');
 	}
 	
-	return $menu.insertBefore(this);
+	return this.prepend($menu);
       },
 
       delegateEvents: function (eventsObj) {
