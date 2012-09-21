@@ -67,10 +67,58 @@
 	exec('formatBlock', 'p');
       } else { exec('formatBlock', 'h3'); }
     },
+
+    getContents = function (e) {
+      e.preventDefault();
+      return $
+    },
     
     cancel = function (e) {
       e.preventDefault();
       e.stopImmediatePropagation();
+    },
+
+    addTextarea = function ($el, className) {
+      var $textarea = $("<div id='lwtextarea'/>")
+	.attr('contenteditable', true)
+	.addClass(className);
+
+      return $el.append($textarea);
+    },
+    
+    addMenu = function ($el, menuItems, className) {
+      
+      var $menu = $("<div id='lwmenu'/>").addClass(className);
+
+      if (menuItems instanceof Array) {
+	menuItems.forEach(function (item, idx, array) {
+	  $menu.append(item);
+	}, null);
+      } else {
+	$.error('incorrect argument passed to function addMenu');
+      }
+      
+      return $el.prepend($menu);
+    },
+
+    delegateEvents = function ($el, eventsObj) {
+
+      for (var selector in eventsObj) {
+
+	var eventMapList = eventsObj[selector];
+	eventMapList.forEach(function (eventMap, idx, array) {
+
+	  for (var event in eventMap) {
+
+	    var handlers = eventMap[event];
+	    handlers.forEach(function (handler, idx, array) {
+	      $el.delegate(selector, event, handler);
+	    }, null);
+
+	  }
+	}, null);
+
+      }
     },
 
     data = {
@@ -80,27 +128,14 @@
       menuClassName: 'lyvewrite',
 
       eventsObj: {
-	'[data-type=bold]': [
-	  {'click': [bold]}
-	],
-	'[data-type=italic]': [
-	  {'click': [italic] }
-	],
-	'[data-type=list]': [
-	  {'click': [list]}
-	],
-	'[data-type=link]': [
-	  {'click': [link] } 
-	],
-	'[data-type=h2]': [
-	  {'click': [h2]}
-	],
-	'[data-type=h3]': [
-	  {'click': [h3]}
-	],
-	'a': [
-	  {'click': [cancel]}
-	]
+	'[data-type=bold]'  : [ {'click': [bold]} ],
+	'[data-type=italic]': [ {'click': [italic]} ],
+	'[data-type=list]'  : [ {'click': [list]} ],
+	'[data-type=link]'  : [ {'click': [link]} ],
+	'[data-type=h2]'    : [ {'click': [h2]} ],
+	'[data-type=h3]'    : [ {'click': [h3]}	],
+	'[data-type=view]'  : [ {'click': [getContents]} ],
+	'a'                 : [ {'click': [cancel]} ]
       },
 
       menuItems: [
@@ -109,7 +144,8 @@
 	'<a href="#" data-type="list">List</a>',
 	'<a href="#" data-type="link">Link</a>',
 	'<a href="#" data-type="h2">Large</a>',
-	'<a href="#" data-type="h3">Medium</a>'
+	'<a href="#" data-type="h3">Medium</a>',
+	'<a href="#" data-type="view">View</a>'
       ]
       
     };
@@ -120,56 +156,12 @@
 	
 	var settings = $.extend(data, options || {});
 	
-	return this.each(function (idx) {  
-	  $(this)
-	    .lyvewrite('addMenu', settings.menuItems, settings.menuClassName)
-	    .lyvewrite('addTextarea', settings.areaClassName)
-	    .lyvewrite('delegateEvents', settings.eventsObj);
+	return this.each(function (idx, el) {
+	  addMenu($(el), settings.menuItems, settings.menuClassName);
+	  addTextarea($(el), settings.areaClassName);
+	  delegateEvents($(el), settings.eventsObj);
 	});
       },
-
-      addTextarea: function (className) {
-	var $textarea = $("<div id='lwtextarea'/>")
-	  .attr('contenteditable', true)
-	  .addClass(className);
-
-	return this.append($textarea);
-      },
-      
-      addMenu: function (menuItems, className) {
-	
-	var $menu = $("<div id='lwmenu'/>").addClass(className);
-
-	if (menuItems instanceof Array) {
-	  menuItems.forEach(function (item, idx, array) {
-	    $menu.append(item);
-	  }, null);
-	} else {
-	  $.error('incorrect argument passed to function addMenu');
-	}
-	
-	return this.prepend($menu);
-      },
-
-      delegateEvents: function (eventsObj) {
-
-	for (var selector in eventsObj) {
-
-	  var eventMapList = eventsObj[selector];
-	  eventMapList.forEach(function (eventMap, idx, array) {
-
-	    for (var event in eventMap) {
-
-	      var handlers = eventMap[event];
-	      handlers.forEach(function (handler, idx, array) {
-		$(this).delegate(selector, event, handler);
-	      }, this);
-
-	    }
-	  }, this);
-
-	}
-      }
 
     };
 
