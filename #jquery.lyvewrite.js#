@@ -72,7 +72,7 @@
   addMenu = function ($el, buttons, className) {
     
     var buttonsList = buttons.split(",");
-    var $menu = $("<div id='lwmenu'/>").addClass(className);
+    var $menu = $("<div id='lwmenu'/>").addClass(optClassName);
   
     if (buttonsList instanceof Array) {
       buttonsList.forEach(function (name, idx, array) {
@@ -86,21 +86,17 @@
     return $el.prepend($menu);
   },
 
-  addTextarea = function ($el, className, width, height) {
+  addTextarea = function ($el, options) {
     var $textarea = $("<div id='lwtextarea'/>")
       .attr('contenteditable', true)
-      .addClass(className)
-      .css({
-	'width': width,
-	'height': height
-      });
+      .addClass(options.areaClassName);
 
     return $el.append($textarea);
   },
   
-  delegateEvents = function ($el, eventsObj) {
+  delegateEvents = function ($el, options) {
 
-    for (var selector in eventsObj) {
+    for (var selector in options.eventsObj) {
 
       var eventMapList = eventsObj[selector];
       eventMapList.forEach(function (eventMap, idx, array) {
@@ -123,7 +119,7 @@
     options = $.extend($.lyvewrite, options || {});
     
     addMenu($el, options.buttons, options.menuClassName);
-    addTextarea($el, options.areaClassName, options.width, options.height);
+    addTextarea($el, options.areaClassName);
     delegateEvents($el, options.eventsObj);
 
     return options;

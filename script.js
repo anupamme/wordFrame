@@ -1,6 +1,9 @@
 $(document).ready(function() {
   
   $('#editor')
-    .lyvewrite();
+    .lyvewrite({
+      'height': 200,
+      'width': 600
+    });
   
 });
