@@ -98,11 +98,11 @@
     return $el.append($textarea);
   },
   
-  delegateEvents = function ($el, eventsObj) {
+  delegateEvents = function ($el, eventsMap) {
 
-    for (var selector in eventsObj) {
+    for (var selector in eventsMap) {
 
-      var eventMapList = eventsObj[selector];
+      var eventMapList = eventsMap[selector];
       eventMapList.forEach(function (eventMap, idx, array) {
 
 	for (var event in eventMap) {
@@ -118,29 +118,29 @@
     }
   },
   
-  init = function ($el, options) {
+  buildEditor = function ($el, options) {
     
-    options = $.extend($.lyvewrite, options || {});
+    options = $.extend(data, options || {});
     
     addMenu($el, options.buttons, options.menuClassName);
     addTextarea($el, options.areaClassName, options.width, options.height);
-    delegateEvents($el, options.eventsObj);
+    delegateEvents($el, options.eventsMap);
 
-    return options;
-  };
+    return true;
+  },
 
-  $.lyvewrite = {
+  data = {
     
     width: 400,
     height: 400,
     
-    buttons: "bold, italic, list, link, large, medium",
+    buttons: "bold,italic,list,link,large,medium",
     
     areaClassName: 'area',
 
     menuClassName: 'lyvewrite',
 
-    eventsObj: {
+    eventsMap: {
       '[data-type=bold]'  : [ {'click': [bold]} ],
       '[data-type=italic]': [ {'click': [italic]} ],
       '[data-type=list]'  : [ {'click': [list]} ],
@@ -149,15 +149,19 @@
       '[data-type=h3]'    : [ {'click': [h3]}  ]
     }
     
+  },
+
+  createButton = function (name, action) {
+    //createButton is the only function which mutates state (the data object)
+    data.buttons += "," + name;
+    selector = "[data-type=" + name + "]";
+    data.eventsMap[selector] = [ {'click': action} ];
   };
   
   $.fn.lyvewrite = function (options) {
     
     return this.each(function (idx, el) {
-
-      if (!$.data(el, 'lyvewrite')) {
-	$.data(el, 'lyvewrite', init($el, options));
-      }
+      buildEditor($el, options, createButton);		     
     });
   };
   
