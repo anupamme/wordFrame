@@ -101,7 +101,7 @@
       var eventMapList = eventsObj[selector];
       eventMapList.forEach(function (eventMap, idx, array) {
 
-  for (var event in eventMap) {
+	for (var event in eventMap) {
 
 	  var handlers = eventMap[event];
 	  handlers.forEach(function (handler, idx, array) {
