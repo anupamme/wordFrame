@@ -114,13 +114,15 @@
     }
   },
   
-  init = function (el, options) {
+  init = function ($el, options) {
     
     options = $.extend($.lyvewrite, options || {});
     
-    addMenu($(el), options.buttons, options.menuClassName);
-    addTextarea($(el), options.areaClassName);
-    delegateEvents($(el), options.eventsObj);
+    addMenu($el, options.buttons, options.menuClassName);
+    addTextarea($el, options.areaClassName);
+    delegateEvents($el, options.eventsObj);
+
+    return options;
   };
 
   $.lyvewrite = {
@@ -149,8 +151,10 @@
   $.fn.lyvewrite = function (options) {
     
     return this.each(function (idx, el) {
-      $.data(el, 'lyvewrite', init(el, options));
-      
+
+      if (!$.data(el, 'lyvewrite')) {
+	$.data(el, 'lyvewrite', init($el, options));
+      }
     });
   };
   
