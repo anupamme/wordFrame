@@ -1,1 +1,14 @@
-A simple text editor, based on http://maccman.github.com/wysiwyg/, re-written in Javascript as a Jquery plugin.
+A simple, extensible rich text editor for the browser, written as a jquery plugin, using http://maccman.github.com/wysiwyg/ as a starting point.
+
+
+Extensions API:
+(see jquery.lyvewrite.justify.js for an example)
+
+$.lyvewrite.createButton(buttonName, clickEventHandler)
+
+buttonName: string
+clickEventHandler: function
+
+
+
+
