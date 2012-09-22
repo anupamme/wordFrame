@@ -154,8 +154,12 @@
   createButton = function (name, action) {
     //createButton is the only function which mutates state (the data object)
     data.buttons += "," + name;
-    selector = "[data-type=" + name + "]";
-    data.eventsMap[selector] = [ {'click': action} ];
+    var selector = "[data-type=" + name + "]";
+    data.eventsMap[selector] = [ {'click': [action]} ];
+  };
+
+  $.lyvewrite = {
+    'createButton': createButton
   };
   
   $.fn.lyvewrite = function (options) {

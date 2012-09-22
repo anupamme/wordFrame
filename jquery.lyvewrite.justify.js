@@ -5,7 +5,6 @@
     document.execCommand('justifyCenter');
   };
 
-  var pluginFn = $('#editor').lyvewrite().data('lyvewrite');
-  pluginFn('center', center);
+  $.lyvewrite.createButton('center', center);
   
 }(jQuery));
