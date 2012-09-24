@@ -29,16 +29,19 @@
   bold = function (e) {
     e.preventDefault();
     exec('bold');
+    $('#'+e.data.areaId).focus();
   },
   
   italic = function (e) {
     e.preventDefault();
     exec('italic');
+    $('#'+e.data.areaId).focus();
   },
   
   list = function (e) {
     e.preventDefault();
     exec('insertUnorderedList');
+    $('#'+e.data.areaId).focus();
   },
 
   link = function (e) {
@@ -48,6 +51,7 @@
       var href = prompt('Enter a link:', 'http://');
       exec('createLink', href);
     } else { return; }
+    $('#'+e.data.areaId).focus();
   },
   
   h2 = function (e) {
@@ -55,6 +59,7 @@
     if (query('formatBlock') === 'h2') {
       exec('formatBlock', 'p');
     } else { exec('formatBlock', 'h2'); }
+    $('#'+e.data.areaId).focus();
   },
   
   h3 = function (e) {
@@ -62,17 +67,13 @@
     if (query('formatBlock') === 'h3') {
       exec('formatBlock', 'p');
     } else { exec('formatBlock', 'h3'); }
+    $('#'+e.data.areaId).focus();
   },
-  
-  cancel = function (e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-  },
-  
+    
   addMenu = function ($el, buttons, className) {
     
     var buttonsList = buttons.split(",");
-    var $menu = $("<div id='lwmenu'/>").addClass(className);
+    var $menu = $("<div id='lwmenu'/>").removeClass().addClass(className);
   
     if (buttonsList instanceof Array) {
       buttonsList.forEach(function (name, idx, array) {
@@ -86,8 +87,8 @@
     return $el.prepend($menu);
   },
 
-  addTextarea = function ($el, className, width, height) {
-    var $textarea = $("<div id='lwtextarea'/>")
+  addTextarea = function ($el, className, id, width, height) {
+    var $textarea = $("<div id="+ id + "/>")
       .attr('contenteditable', true)
       .addClass(className)
       .css({
@@ -98,7 +99,7 @@
     return $el.append($textarea);
   },
   
-  delegateEvents = function ($el, eventsMap) {
+  delegateEvents = function ($el, eventsMap, areaId) {
 
     for (var selector in eventsMap) {
 
@@ -109,7 +110,7 @@
 
 	  var handlers = eventMap[event];
 	  handlers.forEach(function (handler, idx, array) {
-	    $el.delegate(selector, event, handler);
+	    $el.on(event, selector, {'areaId': areaId}, handler);
 	  }, null);
 
 	}
@@ -122,9 +123,19 @@
     
     options = $.extend(data, options || {});
     
-    addMenu($el, options.buttons, options.menuClassName);
-    addTextarea($el, options.areaClassName, options.width, options.height);
-    delegateEvents($el, options.eventsMap);
+    addMenu($el, 
+	    options.buttons,
+	    options.menuClassName);
+
+    addTextarea($el,
+		options.areaClassName,
+		options.areaId,
+		options.width,
+		options.height);
+
+    delegateEvents($el, 
+		   options.eventsMap,
+		   options.areaId);
 
     return true;
   },
@@ -137,6 +148,8 @@
     buttons: "bold,italic,list,link,large,medium",
     
     areaClassName: 'area',
+    
+    areaId: 'lwtextarea',
 
     menuClassName: 'lyvewrite',
 
@@ -145,8 +158,8 @@
       '[data-type=italic]': [ {'click': [italic]} ],
       '[data-type=list]'  : [ {'click': [list]} ],
       '[data-type=link]'  : [ {'click': [link]} ],
-      '[data-type=h2]'    : [ {'click': [h2]} ],
-      '[data-type=h3]'    : [ {'click': [h3]}  ]
+      '[data-type=large]' : [ {'click': [h2]} ],
+      '[data-type=medium]': [ {'click': [h3]}  ],
     }
     
   },
