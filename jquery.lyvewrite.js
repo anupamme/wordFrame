@@ -99,7 +99,7 @@
     return $el.append($textarea);
   },
   
-  delegateEvents = function ($el, eventsMap, areaId) {
+  delegateEvents = function ($el, eventsMap, areaId, menuId) {
 
     for (var selector in eventsMap) {
 
@@ -110,7 +110,13 @@
 
 	  var handlers = eventMap[event];
 	  handlers.forEach(function (handler, idx, array) {
-	    $el.on(event, selector, {'areaId': areaId}, handler);
+	    $el.on(event,
+		   selector, 
+		   {
+		     'areaId': areaId,
+		     'menuId': menuId
+		   },
+		   handler);
 	  }, null);
 
 	}
@@ -136,7 +142,8 @@
 
     delegateEvents($el, 
 		   options.eventsMap,
-		   options.areaId);
+		   options.areaId,
+		   options.menuId);
 
     return true;
   },
