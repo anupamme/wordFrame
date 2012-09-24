@@ -70,10 +70,10 @@
     $('#'+e.data.areaId).focus();
   },
     
-  addMenu = function ($el, buttons, className) {
+  addMenu = function ($el, buttons, className, id) {
     
     var buttonsList = buttons.split(",");
-    var $menu = $("<div id='lwmenu'/>").removeClass().addClass(className);
+    var $menu = $("<div id=" + id + "/>").addClass(className);
   
     if (buttonsList instanceof Array) {
       buttonsList.forEach(function (name, idx, array) {
@@ -118,14 +118,15 @@
 
     }
   },
-  
+
   buildEditor = function ($el, options) {
     
     options = $.extend(data, options || {});
     
     addMenu($el, 
 	    options.buttons,
-	    options.menuClassName);
+	    options.menuClassName,
+	    options.menuId);
 
     addTextarea($el,
 		options.areaClassName,
@@ -139,7 +140,7 @@
 
     return true;
   },
-
+  
   data = {
     
     width: 400,
@@ -153,6 +154,8 @@
 
     menuClassName: 'lyvewrite',
 
+    menuId: 'lwmenu',
+
     eventsMap: {
       '[data-type=bold]'  : [ {'click': [bold]} ],
       '[data-type=italic]': [ {'click': [italic]} ],
@@ -163,6 +166,7 @@
     }
     
   },
+
 
   createButton = function (name, action) {
     //createButton is the only function which mutates state (the data object)
