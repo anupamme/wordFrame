@@ -12,7 +12,7 @@ test("$.lyvewrite is an object", function () {
   ok((typeof $.lyvewrite==='object'), "Passed");
 });
 
-test("text area has focus after button click", function () {
+/*test("text area has focus after button click", function () {
 
   $('[button-type=bold]').trigger('click');
   ok($('#lwtextarea').is(':focus'), "Bold");
@@ -29,4 +29,4 @@ test("text area has focus after button click", function () {
   $('[button-type=medium]').trigger('click');
   ok($('#lwtextarea').is(':focus'), "Medium");
 
-});
+});*/

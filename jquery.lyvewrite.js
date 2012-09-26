@@ -70,17 +70,30 @@
     $('#'+e.data.areaId).focus();
   },
     
-  addMenu = function ($el, buttonNames, buttons, className, menuId, areaId) {
+  //the functions below are coupled to the structure of the data object
+
+  addMenu = function (data) {
+
+    var $el = data.$el,
+    buttonNames = data.buttonNames,
+    buttons = data.buttons,
+    className = data.menuClassName,
+    menuId = data.menuId,
+    areaId = data.areaId;
 
     var addButton = function (name, $parent, buttons) {
-      var $button = $("<a href='#' " + buttons[name].selector + ">" + name + "</a>");
+      var $button = $("<a href='#' " 
+		      + buttons[name].selector 
+		      + ">" 
+		      + buttons[name].html
+		      + "</a>");
       $parent.append($button);
       return $button;
     };
 
     var delegateEvents = function (name, $button, events) {
       for (var e in events) {
-	$button.on(e, { 'areaId': areaId }, events[e]);
+	$button.on(e, data, events[e]);
       }
     };
 
@@ -99,9 +112,20 @@
     return true;
   },
 
-  addTextarea = function ($el, className, id, width, height) {
+  removeMenu = function (data) {
+    data.$el.find('#'+data.menuId).remove();
+  },
+
+  addTextarea = function (data) {
+    
+    var $el = data.$el,
+    className = data.areaClassName,
+    id = data.areaId,
+    width = data.width,
+    height = data.height;
+
     var $textarea = $("<div id="+ id + "/>")
-      .attr('contenteditable', true)
+      .attr('contentEditable', true)
       .addClass(className)
       .css({
 	'width': width,
@@ -111,28 +135,21 @@
     $el.append($textarea);
     return true;
   },
+
+  removeTextarea = function (data) {
+    data.$el.find('#'+data.areaId).remove();
+  },
   
-  buildEditor = function ($el, options) {
+  buildEditor = function (data) {
     
-    options = $.extend(data, options || {});
-    
-    addMenu($el,
-	    options.buttonNames,
-	    options.buttons,
-	    options.menuClassName,
-	    options.menuId,
-	    options.areaId);
-
-    addTextarea($el,
-		options.areaClassName,
-		options.areaId,
-		options.width,
-		options.height);
-
+    addMenu(data);
+    addTextarea(data);
     return true;
   },
   
   data = {
+
+    $el: null,
     
     width: 400,
     height: 400,
@@ -147,50 +164,86 @@
     buttons: {
 
       'bold': {
+	html: 'bold',
 	selector: '[button-type=bold]',
 	events: { 'click': bold }
       },
       'italic':{
+	html: 'italic',
 	selector: '[button-type=italic]',
 	events: { 'click': italic }
       },
       'list': {
+	html: 'list',
 	selector: '[button-type=list]',
 	events: { 'click': list }
       },
       'link': {
+	html: 'link',
 	selector: '[button-type=link]',
 	events: { 'click': link }
       },
       'large': {
+	html: 'large',
 	selector: '[button-type=large]',
 	events: { 'click': large }
       },
       'medium': {
+	html: 'medium',
 	selector: '[button-type=medium]',
 	events: { 'click': medium }
       }
     }
   },
 
-  createButton = function (name, action) {
-    //createButton is the only function which mutates state (the data object)
+  //The functions below mutate the data object
+
+  createButton = function (name, action, html) {
+
     data.buttonNames.push(name);
     data.buttons[name] = {
+      html: html || name,
       selector: "[button-type=" + name + "]",
       events: { 'click': action }
     };
-  };
+  },
 
-  $.lyvewrite = {
-    'createButton': createButton
+  removeButton = function (name) {
+
+    var idx = data.buttonNames.indexOf(name);
+    data.buttonNames.splice(idx, 1);
+    delete data.buttons[name];
+  },
+
+  replaceButton = function (oldName, newName, newButton) {
+
+    var idx = data.buttonNames.indexOf(oldName);
+    data.buttonNames[idx] = newName;
+    data.buttons[newName] = newButton;
+    delete data.buttons[oldName];    
   };
 
   $.fn.lyvewrite = function (options) {
+
+    data = $.extend(data, options || {});
     
     return this.each(function (idx, el) {
-      buildEditor($(el), options);
+      data.$el = $(el);
+      buildEditor(data);
     });
+  };
+
+  //Exports for global access (by plugins, for example)
+
+  $.lyvewrite = {
+    'data': data,
+    'addMenu': addMenu,
+    'removeMenu': removeMenu,
+    'addTextarea': addTextarea,
+    'removeTextarea': removeTextarea,
+    'createButton': createButton,
+    'removeButton': removeButton,
+    'replaceButton': replaceButton
   };
   
 }(jQuery, window, document));
