@@ -54,7 +54,7 @@
     $('#'+e.data.areaId).focus();
   },
   
-  h2 = function (e) {
+  large = function (e) {
     e.preventDefault();
     if (query('formatBlock') === 'h2') {
       exec('formatBlock', 'p');
@@ -62,7 +62,7 @@
     $('#'+e.data.areaId).focus();
   },
   
-  h3 = function (e) {
+  medium = function (e) {
     e.preventDefault();
     if (query('formatBlock') === 'h3') {
       exec('formatBlock', 'p');
@@ -70,15 +70,26 @@
     $('#'+e.data.areaId).focus();
   },
     
-  addMenu = function ($el, buttons, className, id) {
-    
-    var buttonsList = buttons.split(",");
-    var $menu = $("<div id=" + id + "/>").addClass(className);
+  addMenu = function ($el, buttonNames, buttons, className, menuId, areaId) {
+
+    var addButton = function (name, $parent, buttons) {
+      var $button = $("<a href='#' " + buttons[name].selector + ">" + name + "</a>");
+      $parent.append($button);
+      return $button;
+    };
+
+    var delegateEvents = function (name, $button, events) {
+      for (var e in events) {
+	$button.on(e, { 'areaId': areaId }, events[e]);
+      }
+    };
+
+    var $menu = $("<div id=" + menuId + "/>").addClass(className);
   
-    if (buttonsList instanceof Array) {
-      buttonsList.forEach(function (name, idx, array) {
-        var button = "<a href='#' data-type=" + name + ">" + name + "</a>";
-        $menu.append(button);
+    if (buttonNames instanceof Array) {
+      buttonNames.forEach(function (name, idx, array) {
+	var $button = addButton(name, $menu, buttons);
+	delegateEvents(name, $button, buttons[name].events);
       }, null);
     } else {
       $.error('incorrect argument passed to function addMenu');
@@ -99,51 +110,22 @@
     return $el.append($textarea);
   },
   
-  delegateEvents = function ($el, eventsMap, areaId, menuId) {
-
-    for (var selector in eventsMap) {
-
-      var eventMapList = eventsMap[selector];
-      eventMapList.forEach(function (eventMap, idx, array) {
-
-	for (var event in eventMap) {
-
-	  var handlers = eventMap[event];
-	  handlers.forEach(function (handler, idx, array) {
-	    $el.on(event,
-		   selector, 
-		   {
-		     'areaId': areaId,
-		     'menuId': menuId
-		   },
-		   handler);
-	  }, null);
-
-	}
-      }, null);
-
-    }
-  },
-
   buildEditor = function ($el, options) {
     
     options = $.extend(data, options || {});
     
     addMenu($el, 
+	    options.buttonNames,
 	    options.buttons,
 	    options.menuClassName,
-	    options.menuId);
+	    options.menuId,
+	    options.areaId);
 
     addTextarea($el,
 		options.areaClassName,
 		options.areaId,
 		options.width,
 		options.height);
-
-    delegateEvents($el, 
-		   options.eventsMap,
-		   options.areaId,
-		   options.menuId);
 
     return true;
   },
@@ -152,8 +134,36 @@
     
     width: 400,
     height: 400,
+
+    buttonNames: ['bold', 'italic', 'list', 'link', 'large', 'medium'], 
     
-    buttons: "bold,italic,list,link,large,medium",
+    buttons: {
+
+      'bold': {
+	selector: '[button-type=bold]',
+	events: { 'click': bold }
+      },
+      'italic':{
+	selector: '[button-type=italic]',
+	events: { 'click': italic }
+      },
+      'list': {
+	selector: '[button-type=list]',
+	events: { 'click': list }
+      },
+      'link': {
+	selector: '[button-type=link]',
+	events: { 'click': link }
+      },
+      'large': {
+	selector: '[button-type=large]',
+	events: { 'click': large }
+      },
+      'medium': {
+	selector: '[button-type=medium]',
+	events: { 'click': medium }
+      }
+    }, 
     
     areaClassName: 'area',
     
@@ -161,25 +171,17 @@
 
     menuClassName: 'lyvewrite',
 
-    menuId: 'lwmenu',
-
-    eventsMap: {
-      '[data-type=bold]'  : [ {'click': [bold]} ],
-      '[data-type=italic]': [ {'click': [italic]} ],
-      '[data-type=list]'  : [ {'click': [list]} ],
-      '[data-type=link]'  : [ {'click': [link]} ],
-      '[data-type=large]' : [ {'click': [h2]} ],
-      '[data-type=medium]': [ {'click': [h3]}  ],
-    }
+    menuId: 'lwmenu'
     
   },
 
-
   createButton = function (name, action) {
     //createButton is the only function which mutates state (the data object)
-    data.buttons += "," + name;
-    var selector = "[data-type=" + name + "]";
-    data.eventsMap[selector] = [ {'click': [action]} ];
+    data.buttonNames.push(name);
+    data.buttons[name] = {
+      selector: "[button-type=" + name + "]",
+      events: { 'click': action }
+    };
   };
 
   $.lyvewrite = {
