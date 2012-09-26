@@ -95,7 +95,8 @@
       $.error('incorrect argument passed to function addMenu');
     }
     
-    return $el.prepend($menu);
+    $el.prepend($menu);
+    return true;
   },
 
   addTextarea = function ($el, className, id, width, height) {
@@ -107,14 +108,15 @@
 	'height': height
       });
 
-    return $el.append($textarea);
+    $el.append($textarea);
+    return true;
   },
   
   buildEditor = function ($el, options) {
     
     options = $.extend(data, options || {});
     
-    addMenu($el, 
+    addMenu($el,
 	    options.buttonNames,
 	    options.buttons,
 	    options.menuClassName,
@@ -134,9 +136,14 @@
     
     width: 400,
     height: 400,
+        
+    areaClassName: 'area',
+    areaId: 'lwtextarea',
+
+    menuClassName: 'lyvewrite',
+    menuId: 'lwmenu',
 
     buttonNames: ['bold', 'italic', 'list', 'link', 'large', 'medium'], 
-    
     buttons: {
 
       'bold': {
@@ -163,16 +170,7 @@
 	selector: '[button-type=medium]',
 	events: { 'click': medium }
       }
-    }, 
-    
-    areaClassName: 'area',
-    
-    areaId: 'lwtextarea',
-
-    menuClassName: 'lyvewrite',
-
-    menuId: 'lwmenu'
-    
+    }
   },
 
   createButton = function (name, action) {
@@ -187,11 +185,11 @@
   $.lyvewrite = {
     'createButton': createButton
   };
-  
+
   $.fn.lyvewrite = function (options) {
     
     return this.each(function (idx, el) {
-      buildEditor($el, options, createButton);		     
+      buildEditor($(el), options);
     });
   };
   

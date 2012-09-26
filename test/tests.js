@@ -1,4 +1,3 @@
-
 var $el = $('#editor');
 
 test("Editor is content editable", function () {
@@ -14,18 +13,20 @@ test("$.lyvewrite is an object", function () {
 });
 
 test("text area has focus after button click", function () {
-  $('[data-type=bold]').trigger('click');
-  ok($('#lwtextarea').is(':focus'), "Bold OK");
 
-  $('[data-type=italic]').trigger('click');
-  ok($('#lwtextarea').is(':focus'), "Italic OK");
+  $('[button-type=bold]').trigger('click');
+  ok($('#lwtextarea').is(':focus'), "Bold");
 
-  $('[data-type=list]').trigger('click');
-  ok($('#lwtextarea').is(':focus'), "List OK");
+  $('[button-type=italic]').trigger('click');
+  ok($('#lwtextarea').is(':focus'), "Italic");
 
-  $('[data-type=large]').trigger('click');
-  ok($('#lwtextarea').is(':focus'), "Large OK");
+  $('[button-type=list]').trigger('click');
+  ok($('#lwtextarea').is(':focus'), "List");
 
-  $('[data-type=medium]').trigger('click');
-  ok($('#lwtextarea').is(':focus'), "Medium OK");
+  $('[button-type=large]').trigger('click');
+  ok($('#lwtextarea').is(':focus'), "Large");
+
+  $('[button-type=medium]').trigger('click');
+  ok($('#lwtextarea').is(':focus'), "Medium");
+
 });
