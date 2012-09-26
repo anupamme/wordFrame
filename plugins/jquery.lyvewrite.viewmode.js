@@ -3,14 +3,24 @@
   var data = $.lyvewrite.data,
 
   edit = function (e) {
-    $('#'+data.areaId)
+    data.$textarea
       .attr('contentEditable', true)
       .addClass(data.areaClassName)
       .focus();
+
+    var viewButton = {
+      html: 'view',
+      selector: '[button-type=view]',
+      events: {'click': view}
+    };
+
+    $.lyvewrite.replaceButton('edit', 'view', viewButton);
+    $.lyvewrite.removeMenu(data);
+    $.lyvewrite.addMenu(data);
   },
   
   view = function (e) {
-    $('#'+data.areaId)
+    data.$textarea
       .attr('contentEditable', false)
       .removeClass();
     

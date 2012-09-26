@@ -29,19 +29,19 @@
   bold = function (e) {
     e.preventDefault();
     exec('bold');
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
   
   italic = function (e) {
     e.preventDefault();
     exec('italic');
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
   
   list = function (e) {
     e.preventDefault();
     exec('insertUnorderedList');
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
 
   link = function (e) {
@@ -51,7 +51,7 @@
       var href = prompt('Enter a link:', 'http://');
       exec('createLink', href);
     } else { return; }
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
   
   large = function (e) {
@@ -59,7 +59,7 @@
     if (query('formatBlock') === 'h2') {
       exec('formatBlock', 'p');
     } else { exec('formatBlock', 'h2'); }
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
   
   medium = function (e) {
@@ -67,7 +67,7 @@
     if (query('formatBlock') === 'h3') {
       exec('formatBlock', 'p');
     } else { exec('formatBlock', 'h3'); }
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
     
   //the functions below are coupled to the structure of the data object
@@ -107,13 +107,14 @@
     } else {
       $.error('incorrect argument passed to function addMenu');
     }
-    
+
+    data.$menu = $menu;
     $el.prepend($menu);
     return true;
   },
 
   removeMenu = function (data) {
-    data.$el.find('#'+data.menuId).remove();
+    data.$menu.remove();
   },
 
   addTextarea = function (data) {
@@ -131,13 +132,14 @@
 	'width': width,
 	'height': height
       });
-
+    
+    data.$textarea = $textarea;
     $el.append($textarea);
     return true;
   },
 
   removeTextarea = function (data) {
-    data.$el.find('#'+data.areaId).remove();
+    data.$textarea.remove();
   },
   
   buildEditor = function (data) {
@@ -150,6 +152,8 @@
   data = {
 
     $el: null,
+    $menu: null,
+    $textarea: null,
     
     width: 400,
     height: 400,
