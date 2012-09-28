@@ -2,14 +2,15 @@ A simple, extensible rich text editor for the browser, written as a jquery plugi
 
 
 Plugins API:
+(all functions part of the $.lyvewrite object)
 
-$.lyvewrite.addButton(buttonName, buttonObject)
+* addButton(buttonName, buttonObject)
 
-$.lyvewrite.removeButton(buttonName)
+* removeButton(buttonName)
 
-$.lyvewrite.replaceButton(oldName, newName, newButtonObject)
+* replaceButton(oldName, newName, newButtonObject)
 
-$.lyvewrite.rebuildMenu(dataObject)
+* rebuildMenu(dataObject)
 
 
 
