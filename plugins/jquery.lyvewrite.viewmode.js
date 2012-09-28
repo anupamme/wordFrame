@@ -5,36 +5,33 @@
   edit = function (e) {
     data.$textarea
       .attr('contentEditable', true)
-      .addClass(data.areaClassName)
+      .addClass(data.textareaClassName)
       .focus();
-
-    var viewButton = {
-      html: 'view',
-      selector: '[button-type=view]',
-      events: {'click': view}
-    };
-
+    
     $.lyvewrite.replaceButton('edit', 'view', viewButton);
-    $.lyvewrite.removeMenu(data);
-    $.lyvewrite.addMenu(data);
+    $.lyvewrite.rebuildMenu(data);
   },
   
   view = function (e) {
     data.$textarea
       .attr('contentEditable', false)
       .removeClass();
-    
-    var editButton = {
-      html: 'edit',
-      selector: '[button-type=edit]',
-      events: { 'click' : edit }
-    };
-
     $.lyvewrite.replaceButton('view', 'edit', editButton);
-    $.lyvewrite.removeMenu(data);
-    $.lyvewrite.addMenu(data);
+    $.lyvewrite.rebuildMenu(data);
+  },
+
+  viewButton = {
+    html: 'view',
+    selector: '[button-type=view]',
+    events: { 'click': view }
+  },
+
+  editButton = {
+    html: 'edit',
+    selector: '[button-type=edit]',
+    events: { 'click' : edit }
   };
 
-  $.lyvewrite.createButton('view', view);
+  $.lyvewrite.addButton('view', viewButton);
 
 }(jQuery));

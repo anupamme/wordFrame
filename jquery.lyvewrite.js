@@ -72,14 +72,13 @@
     
   //the functions below are coupled to the structure of the data object
 
-  addMenu = function (data) {
+  buildMenu = function (data) {
 
-    var $el = data.$el,
-    buttonNames = data.buttonNames,
+    var buttonNames = data.buttonNames,
     buttons = data.buttons,
     className = data.menuClassName,
     menuId = data.menuId,
-    areaId = data.areaId;
+    areaId = data.textareaId;
 
     var addButton = function (name, $parent, buttons) {
       var $button = $("<a href='#' " 
@@ -92,6 +91,7 @@
     };
 
     var delegateEvents = function (name, $button, events) {
+
       for (var e in events) {
 	$button.on(e, data, events[e]);
       }
@@ -108,20 +108,13 @@
       $.error('incorrect argument passed to function addMenu');
     }
 
-    data.$menu = $menu;
-    $el.prepend($menu);
-    return true;
+    return $menu;
   },
 
-  removeMenu = function (data) {
-    data.$menu.remove();
-  },
-
-  addTextarea = function (data) {
+  buildTextarea = function (data) {
     
-    var $el = data.$el,
-    className = data.areaClassName,
-    id = data.areaId,
+    var className = data.textareaClassName,
+    id = data.textareaId,
     width = data.width,
     height = data.height;
 
@@ -133,21 +126,8 @@
 	'height': height
       });
     
-    data.$textarea = $textarea;
-    $el.append($textarea);
-    return true;
-  },
-
-  removeTextarea = function (data) {
-    data.$textarea.remove();
-  },
-  
-  buildEditor = function (data) {
-    
-    addMenu(data);
-    addTextarea(data);
-    return true;
-  },
+    return $textarea;
+  },  
   
   data = {
 
@@ -158,8 +138,8 @@
     width: 400,
     height: 400,
         
-    areaClassName: 'area',
-    areaId: 'lwtextarea',
+    textareaClassName: 'area',
+    textareaId: 'lwtextarea',
 
     menuClassName: 'lyvewrite',
     menuId: 'lwmenu',
@@ -202,25 +182,39 @@
 
   //The functions below mutate the data object
 
-  createButton = function (name, action, html) {
+  createEditor = function ($el, data) {
+    data.$el = $el;
+    data.$menu = buildMenu(data); 
+    data.$textarea = buildTextarea(data);
 
+    $el.prepend(data.$menu);
+    $el.append(data.$textarea);
+    return $el;
+  },
+
+  rebuildMenu = function (data) {
+    data.$menu.remove();
+    data.$menu = buildMenu(data);
+    data.$el.prepend(data.$menu);
+    return true;
+  },
+
+  rebuildTextarea = function (data) {
+    
+  },
+
+  addButton = function (name, button) {
     data.buttonNames.push(name);
-    data.buttons[name] = {
-      html: html || name,
-      selector: "[button-type=" + name + "]",
-      events: { 'click': action }
-    };
+    data.buttons[name] = button;
   },
 
   removeButton = function (name) {
-
     var idx = data.buttonNames.indexOf(name);
     data.buttonNames.splice(idx, 1);
     delete data.buttons[name];
   },
 
   replaceButton = function (oldName, newName, newButton) {
-
     var idx = data.buttonNames.indexOf(oldName);
     data.buttonNames[idx] = newName;
     data.buttons[newName] = newButton;
@@ -232,20 +226,16 @@
     data = $.extend(data, options || {});
     
     return this.each(function (idx, el) {
-      data.$el = $(el);
-      buildEditor(data);
+      createEditor($(el), data);
     });
   };
 
-  //Exports for global access (by plugins, for example)
+  //Exports for global access by plugins
 
   $.lyvewrite = {
     'data': data,
-    'addMenu': addMenu,
-    'removeMenu': removeMenu,
-    'addTextarea': addTextarea,
-    'removeTextarea': removeTextarea,
-    'createButton': createButton,
+    'rebuildMenu': rebuildMenu,
+    'addButton': addButton,
     'removeButton': removeButton,
     'replaceButton': replaceButton
   };
