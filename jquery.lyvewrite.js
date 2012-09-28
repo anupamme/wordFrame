@@ -199,10 +199,6 @@
     return true;
   },
 
-  rebuildTextarea = function (data) {
-    
-  },
-
   addButton = function (name, button) {
     data.buttonNames.push(name);
     data.buttons[name] = button;
