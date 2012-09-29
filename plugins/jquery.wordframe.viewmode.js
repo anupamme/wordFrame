@@ -9,7 +9,7 @@
       .focus();
     
     $.wordframe.replaceButton('edit', 'view', viewButton);
-    $.wordframe.rebuildMenu(data);
+    $.wordframe.rebuildMenu();
   },
   
   view = function (e) {
@@ -17,7 +17,7 @@
       .attr('contentEditable', false)
       .removeClass();
     $.wordframe.replaceButton('view', 'edit', editButton);
-    $.wordframe.rebuildMenu(data);
+    $.wordframe.rebuildMenu();
   },
 
   viewButton = {

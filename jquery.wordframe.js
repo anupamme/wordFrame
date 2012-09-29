@@ -181,22 +181,15 @@
   },
 
   //The functions below mutate the data object
-
-  createEditor = function ($el, data) {
+    
+  createEditor = function ($el) {
     data.$el = $el;
     data.$menu = buildMenu(data); 
     data.$textarea = buildTextarea(data);
-
+    
     $el.prepend(data.$menu);
     $el.append(data.$textarea);
     return $el;
-  },
-
-  rebuildMenu = function (data) {
-    data.$menu.remove();
-    data.$menu = buildMenu(data);
-    data.$el.prepend(data.$menu);
-    return true;
   },
 
   addButton = function (name, button, index) {
@@ -215,25 +208,51 @@
     var idx = data.buttonNames.indexOf(oldName);
     removeButton(oldName);
     addButton(newName, newButton, idx);
+  },
+
+  rebuildMenu = function () {
+    data.$menu.remove();
+    data.$menu = buildMenu(data);
+    data.$el.prepend(data.$menu);
+    return true;
+  },
+
+  methods = {
+
+    init: function (options) {
+      data = $.extend(data, options || {});
+      return this.each(function (idx, el) {
+	createEditor($(el), data);
+      });
+    },
+
+    getContents: function () {
+      console.log(data.$textarea.html());
+      return data.$textarea.html();
+    }
+
   };
 
-  $.fn.wordframe = function (options) {
-
-    data = $.extend(data, options || {});
+  $.fn.wordframe = function (method) {
     
-    return this.each(function (idx, el) {
-      createEditor($(el), data);
-    });
+    if (methods[method]) {
+      return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+    } else if (typeof method === 'object' || ! method) {
+      return methods.init.apply(this, arguments);
+    } else {
+      $.error('Method ' +  method + ' does not exist on jQuery.wordframe');
+    }    
+
   };
 
   //Exports for global access by plugins
 
   $.wordframe = {
     'data': data,
-    'rebuildMenu': rebuildMenu,
     'addButton': addButton,
     'removeButton': removeButton,
-    'replaceButton': replaceButton
+    'replaceButton': replaceButton,
+    'rebuildMenu': rebuildMenu
   };
   
 }(jQuery, window, document));

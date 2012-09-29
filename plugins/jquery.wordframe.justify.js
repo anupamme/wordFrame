@@ -36,7 +36,6 @@
     events: {'click': right}
   };
 
-
   $.wordframe.addButton('left', leftButton);
   $.wordframe.addButton('center', centerButton);
   $.wordframe.addButton('right', rightButton);
