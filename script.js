@@ -1,7 +1,7 @@
 $(document).ready(function() {
   
   $('#editor')
-    .lyvewrite({
+    .wordframe({
       'height': 200,
       'width': 600
     });

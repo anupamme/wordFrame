@@ -2,9 +2,9 @@ A simple, extensible rich text editor for the browser, written as a jquery plugi
 
 
 Plugins API:
-(all functions part of the $.lyvewrite object)
+(all functions part of the $.wordframe object)
 
-* addButton(buttonName, buttonObject)
+* addButton(buttonName, buttonObject [,indexAt])
 
 * removeButton(buttonName)
 

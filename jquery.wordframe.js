@@ -139,10 +139,10 @@
     height: 400,
         
     textareaClassName: 'area',
-    textareaId: 'lwtextarea',
+    textareaId: 'wftextarea',
 
-    menuClassName: 'lyvewrite',
-    menuId: 'lwmenu',
+    menuClassName: 'wordframe',
+    menuId: 'wfmenu',
 
     buttonNames: ['bold', 'italic', 'list', 'link', 'large', 'medium'], 
     buttons: {
@@ -199,8 +199,9 @@
     return true;
   },
 
-  addButton = function (name, button) {
-    data.buttonNames.push(name);
+  addButton = function (name, button, index) {
+    var idx = index || data.buttonNames.length;
+    data.buttonNames.splice(idx, 0, name);
     data.buttons[name] = button;
   },
 
@@ -212,12 +213,11 @@
 
   replaceButton = function (oldName, newName, newButton) {
     var idx = data.buttonNames.indexOf(oldName);
-    data.buttonNames[idx] = newName;
-    data.buttons[newName] = newButton;
-    delete data.buttons[oldName];    
+    removeButton(oldName);
+    addButton(newName, newButton, idx);
   };
 
-  $.fn.lyvewrite = function (options) {
+  $.fn.wordframe = function (options) {
 
     data = $.extend(data, options || {});
     
@@ -228,7 +228,7 @@
 
   //Exports for global access by plugins
 
-  $.lyvewrite = {
+  $.wordframe = {
     'data': data,
     'rebuildMenu': rebuildMenu,
     'addButton': addButton,

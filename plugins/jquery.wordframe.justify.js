@@ -37,8 +37,8 @@
   };
 
 
-  $.lyvewrite.addButton('left', leftButton);
-  $.lyvewrite.addButton('center', centerButton);
-  $.lyvewrite.addButton('right', rightButton);
+  $.wordframe.addButton('left', leftButton);
+  $.wordframe.addButton('center', centerButton);
+  $.wordframe.addButton('right', rightButton);
   
 }(jQuery));

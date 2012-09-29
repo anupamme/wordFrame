@@ -1,6 +1,6 @@
 (function ($) {
 
-  var data = $.lyvewrite.data,
+  var data = $.wordframe.data,
 
   edit = function (e) {
     data.$textarea
@@ -8,16 +8,16 @@
       .addClass(data.textareaClassName)
       .focus();
     
-    $.lyvewrite.replaceButton('edit', 'view', viewButton);
-    $.lyvewrite.rebuildMenu(data);
+    $.wordframe.replaceButton('edit', 'view', viewButton);
+    $.wordframe.rebuildMenu(data);
   },
   
   view = function (e) {
     data.$textarea
       .attr('contentEditable', false)
       .removeClass();
-    $.lyvewrite.replaceButton('view', 'edit', editButton);
-    $.lyvewrite.rebuildMenu(data);
+    $.wordframe.replaceButton('view', 'edit', editButton);
+    $.wordframe.rebuildMenu(data);
   },
 
   viewButton = {
@@ -32,6 +32,6 @@
     events: { 'click' : edit }
   };
 
-  $.lyvewrite.addButton('view', viewButton);
+  $.wordframe.addButton('view', viewButton);
 
 }(jQuery));
