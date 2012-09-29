@@ -1,4 +1,4 @@
-.lyvewrite {
+.wordframe {
   position: relative;
   display: inline-block;
   height: 25px;
@@ -29,7 +29,7 @@
   font-weight: bold;
 }
 
-.lyvewrite a {
+.wordframe a {
   padding: 0 13px;
   border-right: 1px solid rgba(0,0,0,0.30);
 
@@ -44,17 +44,17 @@
   float: left;
 }
 
-.lyvewrite a:first-child {
+.wordframe a:first-child {
   -webkit-border-radius: 7px 0 0 7px;
 }
 
-.lyvewrite a:last-child {
+.wordframe a:last-child {
   -webkit-border-radius: 0 7px 7px 0;
   border-right: none;
 }
 
-.lyvewrite a:active,
-.lyvewrite a.active {
+.wordframe a:active,
+.wordframe a.active {
   background: #5f9fe6;
   background: -webkit-gradient(linear, left top, left bottom, from(#5f9fe6), to(#3a7ac1));
   background: -moz-linear-gradient(top, #5f9fe6, #3a7ac1);
@@ -67,7 +67,7 @@
   box-shadow: inset 0 0 15px rgba(0,0,0,0.10);
 }
 
-.lyvewrite:after {
+.wordframe:after {
   content: '';
   position: absolute;
   bottom: -8px;
