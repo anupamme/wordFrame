@@ -29,21 +29,18 @@
   bold = function (e) {
     e.preventDefault();
     exec('bold');
-    $(e.target).toggleClass('active', query('bold'));
     e.data.$textarea.focus();
   },
   
   italic = function (e) {
     e.preventDefault();
     exec('italic');
-    $(e.target).toggleClass('active', query('italic'));
     e.data.$textarea.focus();
   },
   
   list = function (e) {
     e.preventDefault();
     exec('insertUnorderedList');
-    $(e.target).toggleClass('active', query('insertUnorderedList'));
     e.data.$textarea.focus();
   },
 

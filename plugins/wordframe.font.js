@@ -4,9 +4,9 @@
 
   medium = function (e) {
     e.preventDefault();
-    if (query('formatBlock') === 'h3') {
-      exec('formatBlock', 'p');
-    } else { exec('formatBlock', 'h3'); }
+    if (document.queryCommandValue('formatBlock') === 'h3') {
+      document.execCommand('formatBlock', 'p');
+    } else { document.execCommand('formatBlock', 'h3'); }
     e.data.$textarea.focus();
   },
 
