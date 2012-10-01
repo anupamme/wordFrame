@@ -3,37 +3,40 @@
   var left = function(e) {
     e.preventDefault();
     document.execCommand('justifyLeft');
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
 
   center = function(e) {
     e.preventDefault();
     document.execCommand('justifyCenter');
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
   
   right = function(e) {
     e.preventDefault();
     document.execCommand('justifyRight');
-    $('#'+e.data.areaId).focus();
+    e.data.$textarea.focus();
   },
 
   leftButton = {
-    html: 'left',
+    html: '<i class="icon-align-left"></i>',
+    helpText: 'Align Left',
     selector: '[button-type=left]',
-    events: {'click': left}
+    eventsMap: {'click': left}
   },
 
   centerButton = {
-    html: 'center',
+    html: '<i class="icon-align-center"></i>',
+    helpText: 'Align Center',
     selector: '[button-type=center]',
-    events: {'click': center}
+    eventsMap: {'click': center}
   },
 
   rightButton = {
-    html: 'right',
+    html: '<i class="icon-align-right"></i>',
+    helpText: 'Align Right',
     selector: '[button-type=right]',
-    events: {'click': right}
+    eventsMap: {'click': right}
   };
 
   $.wordframe.addButton('left', leftButton);

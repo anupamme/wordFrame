@@ -4,27 +4,19 @@
     <title>WordFrame</title>
 
     <link rel="stylesheet" type="text/css" href="wordframe.css" />
-    <link rel="stylesheet" type="text/css" href="test/qunit-git.css" />
 
     <script src="lib/jquery-1.8.1.js"></script>
     <script src="jquery.wordframe.js"></script>
-    <script src="plugins/jquery.wordframe.justify.js"></script>
-    <script src="plugins/jquery.wordframe.viewmode.js"></script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="plugins/wordframe.justify.js"></script>
+    <script src="plugins/wordframe.viewmode.js"></script>
     <script src="script.js"></script> 
   </head>
 
   <body>
-    <div id="container" style="width:800px">
+    <div id="container" class="container">
       <div id="editor"></div>
     </div>
-    When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 
-    <div id="qunit"></div>
-	  
-    <script src="test/qunit-git.js"></script>
-    <script src="test/tests.js"></script>    
   </body>
 
 </html>

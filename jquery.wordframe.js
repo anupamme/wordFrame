@@ -29,18 +29,21 @@
   bold = function (e) {
     e.preventDefault();
     exec('bold');
+    $(e.target).toggleClass('active', query('bold'));
     e.data.$textarea.focus();
   },
   
   italic = function (e) {
     e.preventDefault();
     exec('italic');
+    $(e.target).toggleClass('active', query('italic'));
     e.data.$textarea.focus();
   },
   
   list = function (e) {
     e.preventDefault();
     exec('insertUnorderedList');
+    $(e.target).toggleClass('active', query('insertUnorderedList'));
     e.data.$textarea.focus();
   },
 
@@ -51,14 +54,6 @@
       var href = prompt('Enter a link:', 'http://');
       exec('createLink', href);
     } else { return; }
-    e.data.$textarea.focus();
-  },
-  
-  large = function (e) {
-    e.preventDefault();
-    if (query('formatBlock') === 'h2') {
-      exec('formatBlock', 'p');
-    } else { exec('formatBlock', 'h2'); }
     e.data.$textarea.focus();
   },
   
@@ -82,19 +77,15 @@
 
     var addButton = function (name, $parent, buttons) {
       var $button = $("<a href='#' " 
-		      + buttons[name].selector 
+		      + buttons[name].selector
 		      + ">" 
 		      + buttons[name].html
-		      + "</a>");
+		      + "</a>")
+	.attr('title', buttons[name].helpText)
+	.addClass('btn');
+
       $parent.append($button);
       return $button;
-    };
-
-    var delegateEvents = function (name, $button, events) {
-
-      for (var e in events) {
-	$button.on(e, data, events[e]);
-      }
     };
 
     var $menu = $("<div id=" + menuId + "/>").addClass(className);
@@ -102,7 +93,7 @@
     if (buttonNames instanceof Array) {
       buttonNames.forEach(function (name, idx, array) {
 	var $button = addButton(name, $menu, buttons);
-	delegateEvents(name, $button, buttons[name].events);
+	$button.on(buttons[name].eventsMap, data);
       }, null);
     } else {
       $.error('incorrect argument passed to function addMenu');
@@ -141,41 +132,54 @@
     textareaClassName: 'area',
     textareaId: 'wftextarea',
 
-    menuClassName: 'wordframe',
+    menuClassName: 'btn-group',
     menuId: 'wfmenu',
 
-    buttonNames: ['bold', 'italic', 'list', 'link', 'large', 'medium'], 
+    buttonNames: ['bold', 'italic', 'list', 'link', 'medium'], 
     buttons: {
 
       'bold': {
-	html: 'bold',
+	html: '<i class="icon-bold"></i>',
+	helpText: 'Bold',
 	selector: '[button-type=bold]',
-	events: { 'click': bold }
+	eventsMap: { 
+	  'click': bold,
+	},
+	toggleActive: true
       },
       'italic':{
-	html: 'italic',
+	html: '<i class="icon-italic"></i>',
+	helpText: 'Italics',
 	selector: '[button-type=italic]',
-	events: { 'click': italic }
+	eventsMap: { 
+	  'click': italic
+	},
+	toggleActive: true
       },
       'list': {
-	html: 'list',
+	html: '<i class="icon-list"></i>',
+	helpText: 'List',
 	selector: '[button-type=list]',
-	events: { 'click': list }
+	eventsMap: { 
+	  'click': list
+	}
       },
       'link': {
-	html: 'link',
+	html: '<i class="icon-share"></i>',
+	helpText: 'Hyperlink',
 	selector: '[button-type=link]',
-	events: { 'click': link }
-      },
-      'large': {
-	html: 'large',
-	selector: '[button-type=large]',
-	events: { 'click': large }
+	eventsMap: { 
+	  'click': link
+	}
       },
       'medium': {
-	html: 'medium',
+	html: '<i class="icon-text-height"></i>',
+	helpText: 'Text Size',
 	selector: '[button-type=medium]',
-	events: { 'click': medium }
+	eventsMap: { 
+	  'click': medium
+	},
+	toggleActive: true
       }
     }
   },
@@ -227,7 +231,6 @@
     },
 
     getContents: function () {
-      console.log(data.$textarea.html());
       return data.$textarea.html();
     }
 
@@ -249,6 +252,8 @@
 
   $.wordframe = {
     'data': data,
+    'exec': exec,
+    'query': query,
     'addButton': addButton,
     'removeButton': removeButton,
     'replaceButton': replaceButton,

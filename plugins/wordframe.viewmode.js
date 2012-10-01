@@ -21,15 +21,17 @@
   },
 
   viewButton = {
-    html: 'view',
+    html: '<i class="icon-eye-open"></i>',
+    helpText: 'Preview',
     selector: '[button-type=view]',
-    events: { 'click': view }
+    eventsMap: { 'click': view }
   },
 
   editButton = {
-    html: 'edit',
+    html: '<i class="icon-edit"></i>',
+    helpText: 'Edit',
     selector: '[button-type=edit]',
-    events: { 'click' : edit }
+    eventsMap: { 'click' : edit }
   };
 
   $.wordframe.addButton('view', viewButton);
