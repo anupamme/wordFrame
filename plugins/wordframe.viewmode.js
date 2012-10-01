@@ -21,7 +21,7 @@
   },
 
   viewButton = {
-    html: '<i class="icon-eye-open"></i>',
+    html: '<i class="icon-lock"></i>',
     helpText: 'Preview',
     selector: '[button-type=view]',
     eventsMap: { 'click': view }

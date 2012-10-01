@@ -56,15 +56,7 @@
     } else { return; }
     e.data.$textarea.focus();
   },
-  
-  medium = function (e) {
-    e.preventDefault();
-    if (query('formatBlock') === 'h3') {
-      exec('formatBlock', 'p');
-    } else { exec('formatBlock', 'h3'); }
-    e.data.$textarea.focus();
-  },
-    
+      
   //the functions below are coupled to the structure of the data object
 
   buildMenu = function (data) {
@@ -135,7 +127,7 @@
     menuClassName: 'btn-group',
     menuId: 'wfmenu',
 
-    buttonNames: ['bold', 'italic', 'list', 'link', 'medium'], 
+    buttonNames: ['bold', 'italic', 'list', 'link'], 
     buttons: {
 
       'bold': {
@@ -171,15 +163,6 @@
 	eventsMap: { 
 	  'click': link
 	}
-      },
-      'medium': {
-	html: '<i class="icon-text-height"></i>',
-	helpText: 'Text Size',
-	selector: '[button-type=medium]',
-	eventsMap: { 
-	  'click': medium
-	},
-	toggleActive: true
       }
     }
   },
@@ -252,8 +235,6 @@
 
   $.wordframe = {
     'data': data,
-    'exec': exec,
-    'query': query,
     'addButton': addButton,
     'removeButton': removeButton,
     'replaceButton': replaceButton,

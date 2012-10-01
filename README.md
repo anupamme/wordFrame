@@ -1,5 +1,12 @@
-A simple, extensible rich text editor for the browser, written as a jquery plugin, using http://maccman.github.com/wysiwyg/ as a starting point.
+A simple, extensible rich text editor for the browser.
 
+The core file is very minimal in features, but there are a number of plugins.
+
+JQuery methods:
+
+* .wordframe(): initiates editors on all matching elements
+
+* .wordframe('getContents'): return HTML string of the editor's contents (works for single instance only).
 
 Plugins API:
 (all functions part of the $.wordframe object)
@@ -11,7 +18,3 @@ Plugins API:
 * replaceButton(oldName, newName, newButtonObject)
 
 * rebuildMenu(dataObject)
-
-
-
-
