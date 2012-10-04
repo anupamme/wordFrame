@@ -5,6 +5,7 @@
     if (document.queryCommandValue('formatBlock') === 'h3') {
       document.execCommand('formatBlock', 'p');
     } else { document.execCommand('formatBlock', 'h3'); }
+    e.stopPropagation();
     e.data.$textArea.focus();
   },
 

@@ -1,22 +1,22 @@
 (function ($) {
 
   edit = function (e) {
-    e.data.wF.$textArea
+    e.data.$textArea
       .attr('contentEditable', true)
-      .addClass(data.textareaClassName)
+      .addClass(e.data.classNames.textArea)
       .focus();
-    
-    $.wordframe.replaceButton('edit', viewButton);
-    $.wordframe.buildMenu();
+    e.stopPropagation();
+    $.wordFrame.replaceButton('edit', viewButton);
+    $.wordFrame.createMenu();
   },
   
   view = function (e) {
-    e.data.wF.$textArea
+    e.data.$textArea
       .attr('contentEditable', false)
       .removeClass();
-
-    $.wordframe.replaceButton('view', editButton);
-    $.wordframe.buildMenu();
+    e.stopPropagation();
+    $.wordFrame.replaceButton('view', editButton);
+    $.wordFrame.createMenu();
   },
 
   viewButton = {
@@ -33,6 +33,6 @@
     eventsMap: { 'click' : edit }
   };
 
-  $.wordframe.addButton('view', viewButton);
+  $.wordFrame.addButton(viewButton);
 
 }(jQuery));

@@ -29,18 +29,21 @@
   bold = function (e) {
     e.preventDefault();
     exec('bold');
+    e.stopPropagation();
     e.data.$textArea.focus();
   },
   
   italic = function (e) {
     e.preventDefault();
     exec('italic');
+    e.stopPropagation();
     e.data.$textArea.focus();
   },
   
   list = function (e) {
     e.preventDefault();
     exec('insertUnorderedList');
+    e.stopPropagation();
     e.data.$textArea.focus();
   },
 
@@ -51,6 +54,7 @@
       var href = prompt('Enter a link:', 'http://');
       exec('createLink', href);
     } else { return; }
+    e.stopPropagation();
     e.data.$textArea.focus();
   },
 
@@ -71,7 +75,7 @@
 		      .on(btn.eventsMap, wF));
     }, null);
 
-    wF.$root.append(wF.$menu);
+    wF.$root.prepend(wF.$menu);
   },
 
   createTextArea = function () {
@@ -153,7 +157,7 @@
     createTextArea();
     
     return $el
-      .append(wF.$menu)
+      .prepend(wF.$menu)
       .append(wF.$textArea)
       .data(wF);
     

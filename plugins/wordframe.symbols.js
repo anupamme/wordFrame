@@ -1,23 +1,20 @@
 (function ($) {
   
-  var data = $.wordframe.data,
-  
-
   makeSymbolsEditor = function (e) {
     var $editor = $('<div class="texEditor"/>')
-    data.$el.append($editor);
+    e.data.$root.append($editor);
     $('.texEditor').texEdit();
   },
   
   symbolButton = {
+    name: 'symbols',
     html: '<i class="icon-plus"></i>',
     helpText: 'Math Symbols',
-    selector: '[button-type=symbols]',
     eventsMap: { 
       'click': makeSymbolsEditor
     }
   };
 
-  $.wordframe.addButton('symbols', symbolButton);
+  $.wordFrame.addButton('symbols', symbolButton);
 
 }(jQuery));
