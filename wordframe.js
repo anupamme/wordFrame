@@ -11,7 +11,7 @@
     return text;
   },
 
-  selectTest = function() {
+  selectTest = function () {
     if (getSelectionText().length === 0) {
       alert('Please select some text first');
       return false;
@@ -29,19 +29,19 @@
   bold = function (e) {
     e.preventDefault();
     exec('bold');
-    e.data.$textarea.focus();
+    e.data.$textArea.focus();
   },
   
   italic = function (e) {
     e.preventDefault();
     exec('italic');
-    e.data.$textarea.focus();
+    e.data.$textArea.focus();
   },
   
   list = function (e) {
     e.preventDefault();
     exec('insertUnorderedList');
-    e.data.$textarea.focus();
+    e.data.$textArea.focus();
   },
 
   link = function (e) {
@@ -51,191 +51,191 @@
       var href = prompt('Enter a link:', 'http://');
       exec('createLink', href);
     } else { return; }
-    e.data.$textarea.focus();
-  },
-      
-  //the functions below are coupled to the structure of the data object
-
-  buildMenu = function (data) {
-
-    var buttonNames = data.buttonNames,
-    buttons = data.buttons,
-    className = data.menuClassName,
-    menuId = data.menuId,
-    areaId = data.textareaId;
-
-    var addButton = function (name, $parent, buttons) {
-      var $button = $("<a href='#' " 
-		      + buttons[name].selector
-		      + ">" 
-		      + buttons[name].html
-		      + "</a>")
-	.attr('title', buttons[name].helpText)
-	.addClass('btn');
-
-      $parent.append($button);
-      return $button;
-    };
-
-    var $menu = $("<div id=" + menuId + "/>").addClass(className);
-  
-    if (buttonNames instanceof Array) {
-      buttonNames.forEach(function (name, idx, array) {
-	var $button = addButton(name, $menu, buttons);
-	$button.on(buttons[name].eventsMap, data);
-      }, null);
-    } else {
-      $.error('incorrect argument passed to function addMenu');
-    }
-
-    return $menu;
+    e.data.$textArea.focus();
   },
 
-  buildTextarea = function (data) {
+  createMenu = function () {
     
-    var className = data.textareaClassName,
-    id = data.textareaId,
-    width = data.width,
-    height = data.height;
+    if (wF.$menu) { wF.$menu.remove(); }
+    wF.$menu = $("<div></div>")
+      .attr('id', wF.ids.menu)
+      .addClass(wF.classNames.menu);
 
-    var $textarea = $("<div id="+ id + "/>")
+    wF.buttons.forEach(function (btn, idx, array) {
+      wF.$menu.append($("<a></a>")
+		      .html(btn.html)
+		      .attr('href', '#')
+		      .attr('data-type', btn.name)
+		      .attr('title', btn.helpText)
+		      .addClass(wF.classNames.button)
+		      .on(btn.eventsMap, wF));
+    }, null);
+
+    wF.$root.append(wF.$menu);
+  },
+
+  createTextArea = function () {
+
+    if (wF.$textArea) { wF.textArea.remove(); }
+    wF.$textArea = $("<div></div>")
       .attr('contentEditable', true)
-      .addClass(className)
+      .attr('id', wF.ids.textArea)
+      .addClass(wF.classNames.textArea)
       .css({
-	'width': width,
-	'height': height
+	'width': wF.width,
+	'height': wF.height
       });
     
-    return $textarea;
-  },  
-  
-  data = {
+    wF.$root.append(wF.$textArea);
+  },
 
-    $el: null,
+  wF = {
+
+    $root: null,
     $menu: null,
-    $textarea: null,
-    
+    $textArea: null,
+
     width: 400,
     height: 400,
-        
-    textareaClassName: 'area',
-    textareaId: 'wftextarea',
 
-    menuClassName: 'btn-group',
-    menuId: 'wfmenu',
+    classNames: {
+      textArea: 'area',
+      menu: 'btn-group',
+      button: 'btn'
+    },
 
-    buttonNames: ['bold', 'italic', 'list', 'link'], 
-    buttons: {
-
-      'bold': {
+    ids: {
+      textArea: 'wftextarea',
+      menu: 'wfmenu',
+    },
+    
+    buttons: [
+      {
+	name: 'bold',
 	html: '<i class="icon-bold"></i>',
 	helpText: 'Bold',
-	selector: '[button-type=bold]',
 	eventsMap: { 
 	  'click': bold,
-	},
-	toggleActive: true
+	}
       },
-      'italic':{
+      {
+	name: 'italics',
 	html: '<i class="icon-italic"></i>',
 	helpText: 'Italics',
-	selector: '[button-type=italic]',
 	eventsMap: { 
 	  'click': italic
-	},
-	toggleActive: true
+	}
       },
-      'list': {
+      {
+	name: 'list',
 	html: '<i class="icon-list"></i>',
 	helpText: 'List',
-	selector: '[button-type=list]',
 	eventsMap: { 
 	  'click': list
 	}
       },
-      'link': {
+      {
+	name: 'link',
 	html: '<i class="icon-share"></i>',
 	helpText: 'Hyperlink',
-	selector: '[button-type=link]',
 	eventsMap: { 
 	  'click': link
 	}
       }
+    ]
+
+  },
+      
+  createEditor = function ($el) {
+    
+    wF.$root = $el
+    createMenu();
+    createTextArea();
+    
+    return $el
+      .append(wF.$menu)
+      .append(wF.$textArea)
+      .data(wF);
+    
+  },
+
+  addButton = function (button, index) {
+    if (wF.buttons.filter(function (b) {
+      return (b.name===button.name);}).length !== 0) {
+      console.log('button with this name already present: addButton');
+      return false;
+    } else {
+      var idx = index || wF.buttons.length;
+      wF.buttons.splice(idx, 0, button);
+      return true;
     }
   },
 
-  //The functions below mutate the data object
-    
-  createEditor = function ($el) {
-    data.$el = $el;
-    data.$menu = buildMenu(data); 
-    data.$textarea = buildTextarea(data);
-    
-    $el.prepend(data.$menu);
-    $el.append(data.$textarea);
-    return $el;
-  },
+  getButtonIndex = function (name) {
+    var matches = [];
+    wF.buttons.forEach(function (b, i, array) {
+      if (b.name===name) { matches.push(i); }
+    });
+    switch (matches.length) {
+      case 0: 
+      console.log('no buttons found: getButtonIndex');
+      return -1;
 
-  addButton = function (name, button, index) {
-    var idx = index || data.buttonNames.length;
-    data.buttonNames.splice(idx, 0, name);
-    data.buttons[name] = button;
+      case 1:
+      return matches[0];
+      
+      default:
+      console.log('more than one buttons found: getButtonIndex');
+      return matches[0];
+    }
   },
 
   removeButton = function (name) {
-    var idx = data.buttonNames.indexOf(name);
-    data.buttonNames.splice(idx, 1);
-    delete data.buttons[name];
+    var idx = getButtonIndex(name);
+    if (idx > -1) {
+      wF.buttons.splice(idx, 1);
+    } else {
+      console.log('no button found: removeButton');
+    }
   },
 
-  replaceButton = function (oldName, newName, newButton) {
-    var idx = data.buttonNames.indexOf(oldName);
-    removeButton(oldName);
-    addButton(newName, newButton, idx);
-  },
+  replaceButton = function (oldButtonName, newButton) {
+    var idx = getButtonIndex(oldButtonName);
+    if (idx > -1) {
+      wF.buttons.splice(idx, 1, newButton);
+    } else {
+      console.log('no button found: replaceButton');
+    }
+  };
 
-  rebuildMenu = function () {
-    data.$menu.remove();
-    data.$menu = buildMenu(data);
-    data.$el.prepend(data.$menu);
-    return true;
-  },
-
-  methods = {
-
-    init: function (options) {
-      data = $.extend(data, options || {});
-      return this.each(function (idx, el) {
-	createEditor($(el), data);
-      });
+  $.fn.extend({
+    wordFrame: function (config) {
+      $.extend(wF, config || {});
+      return createEditor(this);
+    },
+    
+    wFTextAreaFocus: function () {
+      if (this.data('$textArea')) {
+	this.data('$textArea').focus();
+      } else { console.log("no editor instance found: wFTextAreaFocus"); }
+      return this;
     },
 
-    getContents: function () {
-      return data.$textarea.html();
-    }
+    wFGetContents: function () {
+      return wF.$textArea.html();
+    },
 
-  };
-
-  $.fn.wordframe = function (method) {
-    
-    if (methods[method]) {
-      return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-    } else if (typeof method === 'object' || ! method) {
-      return methods.init.apply(this, arguments);
-    } else {
-      $.error('Method ' +  method + ' does not exist on jQuery.wordframe');
-    }    
-
-  };
+  });
 
   //Exports for global access by plugins
 
-  $.wordframe = {
-    'data': data,
+  $.wordFrame = {
+
     'addButton': addButton,
     'removeButton': removeButton,
     'replaceButton': replaceButton,
-    'rebuildMenu': rebuildMenu
+    'createMenu': createMenu
+
   };
   
 }(jQuery, window, document));

@@ -1,36 +1,35 @@
 (function ($) {
 
-  var data = $.wordframe.data,
-
   edit = function (e) {
-    data.$textarea
+    e.data.wF.$textArea
       .attr('contentEditable', true)
       .addClass(data.textareaClassName)
       .focus();
     
-    $.wordframe.replaceButton('edit', 'view', viewButton);
-    $.wordframe.rebuildMenu();
+    $.wordframe.replaceButton('edit', viewButton);
+    $.wordframe.buildMenu();
   },
   
   view = function (e) {
-    data.$textarea
+    e.data.wF.$textArea
       .attr('contentEditable', false)
       .removeClass();
-    $.wordframe.replaceButton('view', 'edit', editButton);
-    $.wordframe.rebuildMenu();
+
+    $.wordframe.replaceButton('view', editButton);
+    $.wordframe.buildMenu();
   },
 
   viewButton = {
+    name: 'view',
     html: '<i class="icon-lock"></i>',
     helpText: 'Preview',
-    selector: '[button-type=view]',
     eventsMap: { 'click': view }
   },
 
   editButton = {
+    name: 'edit',
     html: '<i class="icon-edit"></i>',
     helpText: 'Edit',
-    selector: '[button-type=edit]',
     eventsMap: { 'click' : edit }
   };
 

@@ -1,46 +1,46 @@
 (function ($) {
   
-  var left = function(e) {
+  var left = function (e) {
     e.preventDefault();
     document.execCommand('justifyLeft');
-    e.data.$textarea.focus();
+    e.data.$textArea.focus();
   },
 
-  center = function(e) {
+  center = function (e) {
     e.preventDefault();
     document.execCommand('justifyCenter');
-    e.data.$textarea.focus();
+    e.data.$textArea.focus();
   },
   
-  right = function(e) {
+  right = function (e) {
     e.preventDefault();
     document.execCommand('justifyRight');
-    e.data.$textarea.focus();
+    e.data.$textArea.focus();
   },
 
   leftButton = {
+    name: 'left',
     html: '<i class="icon-align-left"></i>',
     helpText: 'Align Left',
-    selector: '[button-type=left]',
     eventsMap: {'click': left}
   },
 
   centerButton = {
+    name: 'center',
     html: '<i class="icon-align-center"></i>',
     helpText: 'Align Center',
-    selector: '[button-type=center]',
     eventsMap: {'click': center}
   },
 
   rightButton = {
+    name: 'right',
     html: '<i class="icon-align-right"></i>',
     helpText: 'Align Right',
-    selector: '[button-type=right]',
     eventsMap: {'click': right}
   };
 
-  $.wordframe.addButton('left', leftButton);
-  $.wordframe.addButton('center', centerButton);
-  $.wordframe.addButton('right', rightButton);
+  $.wordFrame.addButton(leftButton);
+  $.wordFrame.addButton(centerButton);
+  $.wordFrame.addButton(rightButton);
   
 }(jQuery));
