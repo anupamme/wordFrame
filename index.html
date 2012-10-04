@@ -15,18 +15,26 @@
     <script src="lib/jquery-1.8.1.js"></script>
     <script src="lib/jquery.caret.js"></script>
     <script src="lib/texEdit/texEdit.js"></script>
-    <script src="jquery.wordframe.js"></script>
+    <script src="wordframe.js"></script>
     <script src="plugins/wordframe.font.js"></script>
     <script src="plugins/wordframe.justify.js"></script>
     <script src="plugins/wordframe.viewmode.js"></script>
     <script src="plugins/wordframe.symbols.js"></script>
-    <script src="script.js"></script> 
   </head>
 
   <body>
     <div id="container" class="container">
       <div id="editor"></div>
     </div>
+<script>
+  $(document).ready(function () {
+  $('#editor').wordframe({
+  height: 200,
+  width: 600
+  });
+  });
+</script>
+
 
   </body>
 
