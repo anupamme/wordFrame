@@ -152,7 +152,7 @@
       
   createEditor = function ($el) {
     
-    wF.$root = $el
+    wF.$root = $el;
     createMenu();
     createTextArea();
     

@@ -4,7 +4,7 @@ The core file is very minimal in features, but there are a number of plugins.
 
 JQuery methods:
 
-* .wordframe(config): initiates editors on all matching elements.
+* .wordFrame(config): initiates editors on all matching elements.
 
 * .wFTextAreaFocus(): set focus on the text area.
 
