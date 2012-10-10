@@ -22,7 +22,10 @@
       });
       $editor
 	.prepend('<button class="btn-small btn-info">Done</button>')
-	.on('click', null, {'root':$editor},  removeSymbolEditor);
+	.on('click',
+	    null, 
+	    {'root':$editor, 'textArea': e.data.$textArea},
+	    removeSymbolEditor);
     }
   },
   
@@ -30,6 +33,7 @@
     e.preventDefault();
     e.stopPropagation();
     e.data.root.remove();
+    e.data.textArea.focus();
   },
   
   symbolButton = {
