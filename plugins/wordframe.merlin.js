@@ -1,7 +1,19 @@
 (function ($, document) {
   'use strict'
   
-  var makeMerlin = function (e) {
+  var handleInsert = function (e) {
+
+    e.data.textArea.focus();
+
+    var selected = e.data.merlin.handsontable('getSelected');
+    var cell = $.merlin.getCell(selected[0], selected[1]);
+
+    var content = '<span>' + cell.value + '</span>';
+    document.execCommand('insertHTML', false, content);
+
+  },
+
+  makeMerlin = function (e) {
     e.preventDefault();
     e.stopPropagation();
     
@@ -16,20 +28,28 @@
 	outsideClickDeselects: false
       });
 
-      var $doneButton = $('<button class="btn-small btn-info">Done</button>')
+      var $doneButton = $('<button class="btn-small btn-success">Done</button>')
 	    .on('click',
 		null, 
-		{'root':$merlin, 'textArea': e.data.$textArea},
+		{'merlin': $merlin,  'textArea': e.data.$textArea},
 		removeSymbolEditor);
 
-      $merlin.prepend($doneButton);
+      var $insertButton = $('<button class="btn-small btn-primary">Insert</button>')
+	    .on('click', 
+		null,
+		{'merlin': $merlin, 'textArea': e.data.$textArea},
+		handleInsert);
+
+      var $menu = $('<div></div>').append($insertButton).append($doneButton);
+
+      $merlin.prepend($menu);
     }
   },
   
   removeSymbolEditor = function (e) {
     e.preventDefault();
     e.stopPropagation();
-    e.data.root.remove();
+    e.data.merlin.remove();
     e.data.textArea.focus();
   },
   
